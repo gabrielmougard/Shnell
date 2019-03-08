@@ -115,6 +115,7 @@ int shnell_ls(char **args) {
       printf("\033[1;31m");
       printf("Error : too many arguments in the 'ls' command. Type 'help' to show the available options.\n");
       printf("\033[0m;");
+      return 1;
     }
 
     while ((myfile = readdir(directory)) != NULL) {
@@ -133,4 +134,25 @@ int shnell_ls(char **args) {
     }
     closedir(directory);
     return 1;
+}
+
+int shnell_exit(char **args) {
+  if (args[1] != NULL) {
+    //error : too many arguments
+    printf("\033[1;31m");
+    printf("Error : too many arguments in the 'exit' command. Did you mean 'exit'?\n");
+    printf("\033[0m;");
+    return 1;
+  }
+
+  printf("OK ! Good Bye !\n");
+  return 0;
+}
+
+int shnell_cd(char **args) {
+  //TODO
+}
+
+int shnell_led(char **args) {
+  //TODO
 }
