@@ -16,16 +16,13 @@ typedef int bool;
 #define DELIM " \t\r\a\n"
 
 int main(int argc, char **argv) {
-    
-    //import useful ressources
-    Conf *config = malloc(sizeof(struct Conf));
 
     //for the sake of beauty even in the poor graphical environment of the terminal !
     printBanner();
 
     //launch the shell loop with the specified configuration
-    launchShell(&config);
-    
+    launchShell();
+
     //exit with success
     return EXIT_SUCCESS;
 }
@@ -35,14 +32,11 @@ int main(int argc, char **argv) {
  * and finally execute the command while checking the exited variable to see if the program must end.
  *
  * @param Conf* configuration
- * @return void  
+ * @return void
  */
 void launchShell(Conf* config) {
     Node* command;
     char** args;
-
-    //TODO : make use of the config parameter 
-
 
     bool exited = false;
 
@@ -50,6 +44,7 @@ void launchShell(Conf* config) {
         printf("\033[1;31m");
         printf(">>> ");
         printf("\033[0m;");
+
         command = readCommand();
         args = readArgs(command);
         exited = executeCommand(args);
@@ -78,7 +73,7 @@ Node *readCommand(void) {
         }
         else {
             if (current_c == '\\') {
-                
+
                 while(current_c != '\n') {
                     current_c = getchar();
 
@@ -97,7 +92,7 @@ Node *readCommand(void) {
                     printf("... ");
                     printf("\033[0m;");
                 }
-                    
+
             }
             else {
                 //register the character
@@ -108,10 +103,10 @@ Node *readCommand(void) {
 }
 
 char **readArgs(Node *command) {
-    char* convertedCommand = linkedListToArray(&command);
+    char* convertedCommand = linkedListToArray(command);
     int nbElements = sizeof(convertedCommand)/sizeof(convertedCommand[0]);
     int index = 0;
-    char **words = malloc(nbElements*sizeof(char));
+    char **words = malloc(nbElements*sizeof(char*));
     char *word;
 
     word = strtok(command,DELIM);
@@ -171,7 +166,7 @@ int executeCommand(char **args) {
  * @return void
  */
 void printBanner(void) {
-    printf("\t A Shell Snips Challenge by Gabriel Mougard.\n");
+    printf("\tA Shell Snips Challenge by Gabriel Mougard.\n");
 
     char ch, file_name[25];
 	FILE *fp;
@@ -187,6 +182,7 @@ void printBanner(void) {
 	while((ch = fgetc(fp)) != EOF) {
 		printf("%c",ch);
 	}
+  printf("\n");
 	fclose(fp);
 
 }
