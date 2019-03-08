@@ -2,6 +2,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <dirent.h>
 
 #define VERSION "1.0"
 
@@ -93,5 +97,40 @@ int shnell_pwd(char **args) {
 }
 
 int shnell_ls(char **args) {
-  
+    DIR *directory;
+    struct dirent *myFile;
+    struct stat mystat;
+
+    char buf[512];
+    if (args[1] == NULL) {
+      //the command is just 'ls'
+      directory = opendir(getenv("PWD"));
+    }
+    else {
+      directory = opendir(args[1]);
+    }
+
+    if (args[2] != NULL) {
+      //error : too many arguments
+      printf("\033[1;31m");
+      printf("Error : too many arguments in the 'ls' command. Type 'help' to show the available options.\n");
+      printf("\033[0m;");
+    }
+
+    while ((myfile = readdir(directory)) != NULL) {
+
+      if (args[1] == NULL) {
+
+        sprintf(buf, "%s/%s", getenv("PWD"), myfile->d_name);
+      }
+      else {
+        sprintf(buf, "%s/%s", args[1], myfile->d_name);
+      }
+      stat(buf, &mystat);
+      printf("%zu",mystat.st_size);
+      printf(" %s\n",myfile->d_name);
+
+    }
+    closedir(directory);
+    return 1;
 }
