@@ -1,3 +1,7 @@
+#include "States.h"
+
+#include <stdio.h>
+#include <stdlib.h>
 
 /**
  * The list of built-in commands of Shnell

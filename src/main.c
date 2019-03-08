@@ -4,8 +4,8 @@
  * @brief main file
  */
 
-#include "Conf.h"
 #include "Node.h"
+#include "States.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -16,6 +16,9 @@ typedef int bool;
 #define DELIM " \t\r\a\n"
 
 int main(int argc, char **argv) {
+
+    //create the state table (it can handle 50 led in our case)
+    stateTable *t = createTable(50);
 
     //for the sake of beauty even in the poor graphical environment of the terminal !
     printBanner();
