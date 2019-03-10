@@ -22,16 +22,16 @@ This shell implementation is meant to be translated or ported on ARM Cortex clas
 * __pwd__ : print the current working directory.
 
 ## How to install
-with GCC... duh ! 
+with GCC... duh !
 ## Portability to MCU
 
 ## Process story
 
 I began the development of the application Thurday the 7th of March just after receiving the mail for the challenge.
-First, I search on the internet how to implement a basic shell in C since I've done anything like this before...
-I found some interesting ressources and I relied on them to build the upper part of "Shnell" (the reading, parsing and executing processes of the shell).
+First, I searched on the Internet on how to implement a basic shell in C since I had never done anything like this before...
+I found some interesting ressources and I heavily relied on them (at first) to build the upper part of "Shnell" (the reading, parsing and executing processes of the shell).
 Then, I decided to implement my own abstract data types for some tasks (e.g : the Node structure, to have a LinkedList containing the written command and not a simple buffer
-because of the fixed size of this one). I end up coding the simplest features first (the `version` command, the `pwd` command, etc...) and finally, once I had done the `led status`, `led on`, and `led off` commands, the things were just starting to get fun...
+because of the fixed size of this one). I end up coding the simplest features first (the `version` command, the `pwd` command, etc...) and finally, once I had done the `led status`, `led on`, and `led off` commands, things were just starting to get fun...
 I just can't figure out how to do the 'blinking' process without stopping the main program. I got stuck into this particular problem for a couple of days, but I decided to go for some inefficient solutions since I was running out of ideas...
 I decided to use child processes (with `fork()`) in an other terminal to simulate the LED. Actually, for each blinking LED, there is one associated terminal with a fancy blinking icon and the PID ! Currently, I'm still debugging the codebase. I hope I will solve the main issues.
 
