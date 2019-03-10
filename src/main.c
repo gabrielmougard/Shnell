@@ -34,10 +34,10 @@ int main(int argc, char **argv) {
  * launchShell initialize the process of reading the current line, then call the line parser
  * and finally execute the command while checking the exited variable to see if the program must end.
  *
- * @param Conf* configuration
+ * @param void
  * @return void
  */
-void launchShell(Conf* config) {
+void launchShell(void) {
     Node* command;
     char** args;
 
@@ -58,6 +58,9 @@ void launchShell(Conf* config) {
 
 /**
  * readCommand reads a line from stdin
+ *
+ * @param void
+ * @return Node* return the entered data in a LinkedList, thus we don't need a buffer and we have a dynamic storage.
  */
 Node *readCommand(void) {
     Node *start = NULL;
@@ -105,6 +108,12 @@ Node *readCommand(void) {
     }
 }
 
+/**
+ * Parses the entered command.
+ *
+ * @param Node* the entered command.
+ * @return char** a list of arguments.
+ */
 char **readArgs(Node *command) {
     char* convertedCommand = linkedListToArray(command);
     int nbElements = sizeof(convertedCommand)/sizeof(convertedCommand[0]);
@@ -122,6 +131,12 @@ char **readArgs(Node *command) {
     return words;
 }
 
+/**
+ * Launch the shell process
+ *
+ * @param char** the arguments of the command
+ * @return int
+ */
 int shnellLaunch(char **args) {
     pid_t pid,waitPid;
     int status;
@@ -147,6 +162,12 @@ int shnellLaunch(char **args) {
     return 1;
 }
 
+/**
+ * Execute the entered command and calls the right builtin feature function.
+ *
+ * @param char** the arguments of the command
+ * @return int
+ */
 int executeCommand(char **args) {
     if (args[0] == NULL) {
         //empty command

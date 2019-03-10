@@ -74,12 +74,6 @@ int builtinLength() {
   return sizeof(commands)/sizeof(char *);
 }
 
-/**
- * 'help' command implementation
- *
- * @param char**
- * @return int
- */
 int shnell_help(char **args) {
 
   if (args[1] != NULL) {
@@ -190,7 +184,7 @@ int shnell_exit(char **args) {
 int shnell_cd(char **args) {
   //TODO
 
-  
+
 }
 
 int isNumber(char *array) {
