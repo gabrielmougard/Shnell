@@ -1,7 +1,7 @@
 /**
- * @file main.c
- * @author Gabriel Mougard
- * @brief main file
+ * \file main.c
+ * \author Gabriel Mougard
+ * \brief main file
  */
 
 #include "Node.h"
@@ -17,9 +17,6 @@ typedef int bool;
 
 int main(int argc, char **argv) {
 
-    //create the state table (it can handle 50 led in our case)
-    stateTable *t = createTable(50);
-
     //for the sake of beauty even in the poor graphical environment of the terminal !
     printBanner();
 
@@ -34,8 +31,8 @@ int main(int argc, char **argv) {
  * launchShell initialize the process of reading the current line, then call the line parser
  * and finally execute the command while checking the exited variable to see if the program must end.
  *
- * @param void
- * @return void
+ * \param void
+ * \return void
  */
 void launchShell(void) {
     Node* command;
@@ -59,8 +56,8 @@ void launchShell(void) {
 /**
  * readCommand reads a line from stdin
  *
- * @param void
- * @return Node* return the entered data in a LinkedList, thus we don't need a buffer and we have a dynamic storage.
+ * \param void
+ * \return Node* return the entered data in a LinkedList, thus we don't need a buffer and we have a dynamic storage.
  */
 Node *readCommand(void) {
     Node *start = NULL;
@@ -111,8 +108,8 @@ Node *readCommand(void) {
 /**
  * Parses the entered command.
  *
- * @param Node* the entered command.
- * @return char** a list of arguments.
+ * \param Node* the entered command.
+ * \return char** a list of arguments.
  */
 char **readArgs(Node *command) {
     char* convertedCommand = linkedListToArray(command);
@@ -134,8 +131,8 @@ char **readArgs(Node *command) {
 /**
  * Launch the shell process
  *
- * @param char** the arguments of the command
- * @return int
+ * \param char** the arguments of the command
+ * \return int
  */
 int shnellLaunch(char **args) {
     pid_t pid,waitPid;
@@ -165,8 +162,8 @@ int shnellLaunch(char **args) {
 /**
  * Execute the entered command and calls the right builtin feature function.
  *
- * @param char** the arguments of the command
- * @return int
+ * \param char** the arguments of the command
+ * \return int
  */
 int executeCommand(char **args) {
     if (args[0] == NULL) {
@@ -186,8 +183,8 @@ int executeCommand(char **args) {
 
 /**
  * Print a beautiful banner !
- * @param void
- * @return void
+ * \param void
+ * \return void
  */
 void printBanner(void) {
     printf("\tA Shell Snips Challenge by Gabriel Mougard.\n");

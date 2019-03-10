@@ -48,12 +48,18 @@ static t_symstruct lookupTable[] = {
   {"stop-blink",A10}, {"status",A11}
 }
 
-#define NKEYS (sizeof(lookupTable)/sizeof(t_symstruct))
+static t_symstruct options[] = {
+  {"No options",1}, {"No options",2}, {"specified directory (e.g : /home/gab/)",3},
+  {"No options",4}, {"No options",5}, {"No options",6}, {"'on' or 'off' : choose the state and if not created, create it.\n'start-blink <delay>' or 'stop-blink <delay>' : start/stop blinking a led in a new terminal with delay between each blink.\n'status' : print the status of all the LEDs",7}
+}
 
-int keyFromString(char *key) {
+#define NKEYS (sizeof(lookupTable)/sizeof(t_symstruct))
+#define NOPTIONS (sizeof(options)/sizeof(t_symstruct))
+
+int keyFromString(t_symstruct **table,char *key) {
   int i;
   for (i = 0; i < NKEYS; i++) {
-    t_symstruct *sym = lookupTable[i];
+    t_symstruct *sym = table[i];
     if (strcmp(sym->key,key) == 0)
       return sym->val;
   }
@@ -88,8 +94,12 @@ int shnell_help(char **args) {
   printf("Hi ! You need help ? Here are the available built-in commands :\n");
   printf("\n");
 
-  for (int i = 0; i < builtinLength(); i++) {
-    printf(" %s | options : %s\n", commands[i], command_options[i]);
+  char* buff; //store the key for retreiving options
+
+  for (int i = 0; i < NOPTIONS; i++) {
+    sprintf(buff,"%d",i);
+    printf(" %s | options : %s\n", commands[i], keyFromString(options,buff));
+  ));
   }
 
   printf("See the official documentation at : https://www.github.com/gabrielmougard/Shnell/doc.pdf\n", );
@@ -209,12 +219,73 @@ int shnell_led(char **args) {
     return 1;
   }
 
-  switch(keyFromString(args[1])) {
+  switch(keyFromString(lookupTable,args[1])) {
     case A7: //on
       if (args[2] == NULL) {
         //error : <led_id> not present
         printf("\033[1;31m");
         printf("Error : missing arguments in the 'led' command : <led_id>. Use 'help' to see the documentation.\n");
+        printf("\033[0m;");
+        break;
+      }
+
+      if (args[3] != NULL) {
+        //error : <led_id> not present
+        printf("\033[1;31m");
+        printf("Error : too many arguments in the 'led' command. Use 'help' to see the documentation.\n");
+        printf("\033[0m;");
+        break;
+      }
+
+
+
+      if(!isNumber(args[2])) {
+        //error : <led_id> is not a number
+        printf("\033[1;31m");
+        printf("Error : <led_id> must be an integer. Use 'help' to see the documentation.\n");
+        printf("\033[0m;");
+        break;
+      }
+
+      //check if it already exists. If not, create it.
+      int s = lookup(STATES,atoi(args[2]));
+      if ( s == -1) { // <led_id> do not exists
+
+        insert(STATES,atoi(args[2]),true);
+        printf("\033[1;33m"); //yellow color
+        printf("The LED %s has been created and is on\n",args[2]);
+        printf("\n");
+      }
+      else {
+        //it exists, then check the state and if it's off, put it on. If it's already on, trigger the user and keep the same state
+        if (lookup(STATES,atoi(args[2])) == 1) { //it was on
+          printf("\033[1;33m"); //yellow color
+          printf("The LED %s was already on\n",args[2]);
+          printf("\n");
+        }
+        else { //it was off
+          insert(STATES,atoi(args[2]),true);
+          printf("\033[1;33m"); //yellow color
+          printf("The LED %s has been switched on\n",args[2]);
+          printf("\n");
+        }
+      }
+      break;
+
+
+    case A8: //off
+      if (args[2] == NULL) {
+        //error : <led_id> not present
+        printf("\033[1;31m");
+        printf("Error : missing arguments in the 'led' command : <led_id>. Use 'help' to see the documentation.\n");
+        printf("\033[0m;");
+        break;
+      }
+
+      if (args[3] != NULL) {
+        //error : <led_id> not present
+        printf("\033[1;31m");
+        printf("Error : too many arguments in the 'led' command. Use 'help' to see the documentation.\n");
         printf("\033[0m;");
         break;
       }
@@ -228,29 +299,46 @@ int shnell_led(char **args) {
       }
 
       //check if it already exists. If not, create it.
-      if (!ledIdExists(args[2])) {
+      int s = lookup(STATES,atoi(args[2]));
+      if ( s == -1) { // <led_id> do not exists
 
+        insert(STATES,atoi(args[2]),false);
+        printf("\033[1;33m"); //yellow color
+        printf("The LED %s has been created and is off\n",args[2]);
+        printf("\n");
       }
       else {
         //it exists, then check the state and if it's off, put it on. If it's already on, trigger the user and keep the same state
-
+        if (lookup(STATES,atoi(args[2])) == 1) { //it was on
+          insert(STATES,atoi(args[2]),false);
+          printf("\033[1;33m"); //yellow color
+          printf("The LED %s has been switched off\n",args[2]);
+          printf("\n");
+        }
+        else { //it was off
+          printf("\033[1;33m"); //yellow color
+          printf("The LED %s was already off\n",args[2]);
+          printf("\n");
+        }
       }
-
-
-    case A8: //off
-      if (args[2] == NULL) {
-        //error : <led_id> not present
-        printf("\033[1;31m");
-        printf("Error : missing arguments in the 'led' command : <led_id>. Use 'help' to see the documentation.\n");
-        printf("\033[0m;");
-        break;
-      }
+      break;
 
     case A9: //start-blink
 
     case A10: //stop-blink
 
     case A11: //status
+
+      if (args[2] != NULL) {
+        //error : <led_id> not present
+        printf("\033[1;31m");
+        printf("Error : too many arguments in the 'led staus' command. Use 'help' to see the documentation.\n");
+        printf("\033[0m;");
+        break;
+      }
+
+      sumUp(STATES);
+
 
     case BADKEY:
       //error : wrong argument

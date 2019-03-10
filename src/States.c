@@ -50,3 +50,11 @@ int lookup(stateTable *t, int key) {
   }
   return -1;
 }
+
+void sumUp(stateTable *t) {
+  stateNode *list = t->list[0];
+  
+  while(list) {
+    printf("<led_id> : %d\t<state> : %d\n",list->key, list->state);
+  }
+}
