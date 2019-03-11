@@ -1,4 +1,7 @@
 # TODO
 
-* Finish the implementation of Features.c/shnell_led function.
-* Finish the implementation of Features.c/shnell_cd function.
+* Debugging
+* Features testing
+* Build documentation
+* write about the portability on MCU
+* (optional) code a makefile instead of using gcc to compile.
