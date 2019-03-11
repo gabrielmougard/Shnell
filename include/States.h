@@ -23,6 +23,7 @@ typedef int bool;
  */
 
 typedef struct stateNode {
+  pid_t pidKey;
   int key;
   bool state;
   stateNode *next;
@@ -85,3 +86,12 @@ int lookup(stateTable *t, int key);
  * \return void
  */
 void sumUp(stateTable *t);
+
+/**
+ * Recover the PID associated with the ID of the LED.
+ *
+ * \param stateTable* the pointed state table.
+ * \param int the specified <led_id>
+ * \return pid_t the associated PID.
+ */
+pid_t getPid(stateTable *t,int key);

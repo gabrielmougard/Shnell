@@ -325,12 +325,37 @@ int shnell_led(char **args) {
 
     case A9: //start-blink
 
+
     case A10: //stop-blink
+      if(args[2] == NULL) {
+        //error : missing argument
+        printf("\033[1;31m");
+        printf("Error : missing argument in the 'led stop-blink' command : <led_id>. Use 'help' to see the documentation.\n");
+        printf("\033[0m;");
+        break;
+      }
+
+      if (lookup(STATES,atoi(args[2])) == -1) {
+        //error : the <led_id> doesn't exists
+        printf("\033[1;31m");
+        printf("Error : The <led_id> doesn't exists.\n");
+        printf("\033[0m;");
+        break;
+      }
+
+      pid_t pidKey = getPid(STATES,atoi(args[2]));
+      printf("\033[1;33m"); //yellow color
+      printf("The LED %s has been stopped\n",args[2]);
+      printf("\n");
+
+      //kill effectively the process
+      kill(pidKey,SIGKILL);
+      break;
 
     case A11: //status
 
       if (args[2] != NULL) {
-        //error : <led_id> not present
+        //error : too many arguments
         printf("\033[1;31m");
         printf("Error : too many arguments in the 'led staus' command. Use 'help' to see the documentation.\n");
         printf("\033[0m;");

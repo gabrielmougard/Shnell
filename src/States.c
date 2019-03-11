@@ -20,7 +20,7 @@ int hashCode(stateTable *t, int key) {
   return key%t->size;
 }
 
-void insert(stateTable *t, int key, bool state) {
+void insert(stateTable *t, int key, bool state, pid_t pid) {
   int pos = hashCode(t,key);
   stateNode *list = t->list[pos];
   stateNode *newNode = (stateNode*)malloc(sizeof(stateNode));
@@ -35,6 +35,7 @@ void insert(stateTable *t, int key, bool state) {
   newNode->key = key;
   newNode->state = state;
   newNode->next = list;
+  newNode->pidKey = pid;
   t->list[pos] = newNode;
 }
 
@@ -53,8 +54,16 @@ int lookup(stateTable *t, int key) {
 
 void sumUp(stateTable *t) {
   stateNode *list = t->list[0];
-  
+
   while(list) {
-    printf("<led_id> : %d\t<state> : %d\n",list->key, list->state);
+    printf("<led_id> : %d\t<state> : %d\t<PID> : %d\n",list->key, list->state,list->pidKey);
   }
+}
+
+pid_t getPid(stateTable *t,int key) {
+  int pos = hashCode(t,key);
+  stateNode *node = t->list[pos];
+
+  return node->pidKey;
+
 }

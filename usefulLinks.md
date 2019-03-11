@@ -12,4 +12,7 @@
  ## github interesting links
 
  * https://gist.github.com/jadengore/10208688
- 
+
+ ## child processes
+
+ * https://stackoverflow.com/questions/36552645/how-assign-a-new-terminal-window-to-each-child-process

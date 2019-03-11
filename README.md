@@ -22,8 +22,13 @@ This shell implementation is meant to be translated or ported on ARM Cortex clas
 * __pwd__ : print the current working directory.
 
 ## How to install
-with GCC... duh !
+
+With GCC... duh !
+(Coming soon)
+
 ## Portability to MCU
+
+Coming soon.
 
 ## Process story
 
