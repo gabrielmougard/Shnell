@@ -251,7 +251,7 @@ int shnell_led(char **args) {
       int s = lookup(STATES,atoi(args[2]));
       if ( s == -1) { // <led_id> do not exists
 
-        insert(STATES,atoi(args[2]),true);
+        insert(STATES,atoi(args[2]),1,NULL);
         printf("\033[1;33m"); //yellow color
         printf("The LED %s has been created and is on\n",args[2]);
         printf("\n");
@@ -264,14 +264,13 @@ int shnell_led(char **args) {
           printf("\n");
         }
         else { //it was off
-          insert(STATES,atoi(args[2]),true);
+          insert(STATES,atoi(args[2]),1,NULL);
           printf("\033[1;33m"); //yellow color
           printf("The LED %s has been switched on\n",args[2]);
           printf("\n");
         }
       }
       break;
-
 
     case A8: //off
       if (args[2] == NULL) {
@@ -302,7 +301,7 @@ int shnell_led(char **args) {
       int s = lookup(STATES,atoi(args[2]));
       if ( s == -1) { // <led_id> do not exists
 
-        insert(STATES,atoi(args[2]),false);
+        insert(STATES,atoi(args[2]),0,NULL);
         printf("\033[1;33m"); //yellow color
         printf("The LED %s has been created and is off\n",args[2]);
         printf("\n");
@@ -310,7 +309,7 @@ int shnell_led(char **args) {
       else {
         //it exists, then check the state and if it's off, put it on. If it's already on, trigger the user and keep the same state
         if (lookup(STATES,atoi(args[2])) == 1) { //it was on
-          insert(STATES,atoi(args[2]),false);
+          insert(STATES,atoi(args[2]),0,NULL);
           printf("\033[1;33m"); //yellow color
           printf("The LED %s has been switched off\n",args[2]);
           printf("\n");
@@ -356,14 +355,49 @@ int shnell_led(char **args) {
         break;
       }
 
-      //start forking process in xterm
+      //check before if the led was created before starting forking process in xterm
+      if(lookup(STATES,atoi(args[2])) == -1) {
+        //error : LED not created
+        printf("\033[1;31m");
+        printf("Error : This led hasn't been created yet. Use 'led on <led_id>' to create one.\n");
+        printf("\033[0m;");
+        break;
+      }
+      else {
+        //check the state. If the state is on, do the blinking. Else, print error.
+        if(lookup(STATES,atoi(args[2])) == 0) { //led is off
+          //error : LED not created
+          printf("\033[1;31m");
+          printf("Error : This led is off. Use 'led on <led_id>' to switch it on.\n");
+          printf("\033[0m;");
+          break;
+        }
+        else { //led is on, then do the blinking.
 
+          //create pid
+          pid_t pid = fork();
 
+          //execute child process
+          // pid is the first argument of our blink.out process
+          // args[2] which is the <led_id> is the second argument.
+          // args[3] which is the <delay> is the third argument.
+          if (pid == 0) { //success in forking
+            execl("/usr/bin/xterm","xterm","./blink.out",pid,args[2],args[3],NULL);
 
+            //save pid to STATES
+            insert(STATES,atoi(args[2]),1,pid);
+          }
+          else {
+            //error : fork not successful
+            printf("\033[1;31m");
+            printf("Error : Blinking child process failed\n");
+            printf("\033[0m;");
+            break;
+          }
 
+        }
 
-
-
+      }
 
     case A10: //stop-blink
       if(args[2] == NULL) {
