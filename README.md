@@ -23,6 +23,7 @@ This shell implementation is meant to be translated or ported on ARM Cortex clas
 
 ## How to install
 
+* install xterm (usually, it's already installed on UNIX systems)
 With GCC... duh !
 (Coming soon)
 

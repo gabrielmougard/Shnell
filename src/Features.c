@@ -201,7 +201,7 @@ int isNumber(char *array) {
 
   int size = sizeof(array)/sizeof(char);
   for (int i = 0; i < size; i++) {
-    if (isalpha(array[i])) {
+    if (!isdigit(array[i])) {
       return 0;
     }
   }
@@ -324,6 +324,45 @@ int shnell_led(char **args) {
       break;
 
     case A9: //start-blink
+      if(args[2] == NULL) {
+        //error : missing argument
+        printf("\033[1;31m");
+        printf("Error : missing argument in the 'led start-blink' command : <led_id>. Use 'help' to see the documentation.\n");
+        printf("\033[0m;");
+        break;
+      }
+
+      if(!isNumber(args[2])) {
+        //error : <led_id> is not a number
+        printf("\033[1;31m");
+        printf("Error : <led_id> must be an integer. Use 'help' to see the documentation.\n");
+        printf("\033[0m;");
+        break;
+      }
+
+      if(args[3] == NULL) {
+        //error : missing argument
+        printf("\033[1;31m");
+        printf("Error : missing argument in the 'led start-blink' command : <delay>. Use 'help' to see the documentation.\n");
+        printf("\033[0m;");
+        break;
+      }
+
+      if(!isNumber(args[3])) {
+        //error : <delay> is not a number
+        printf("\033[1;31m");
+        printf("Error : <delay> must be an integer (in ms). Use 'help' to see the documentation.\n");
+        printf("\033[0m;");
+        break;
+      }
+
+      //start forking process in xterm
+
+
+
+
+
+
 
 
     case A10: //stop-blink
@@ -331,6 +370,14 @@ int shnell_led(char **args) {
         //error : missing argument
         printf("\033[1;31m");
         printf("Error : missing argument in the 'led stop-blink' command : <led_id>. Use 'help' to see the documentation.\n");
+        printf("\033[0m;");
+        break;
+      }
+
+      if(!isNumber(args[2])) {
+        //error : <led_id> is not a number
+        printf("\033[1;31m");
+        printf("Error : <led_id> must be an integer. Use 'help' to see the documentation.\n");
         printf("\033[0m;");
         break;
       }
