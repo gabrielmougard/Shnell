@@ -60,10 +60,10 @@ Node *readCommand(void) {
 
                     //only push in previous_c
                     if (current_c != ' ') {
-                        push(&previous,&current_c,char_size);
+                        push(&previous_c,&current_c,char_size);
                     }
                 }
-                if(getCount(&previous) > 0) {
+                if(getCount(&previous_c) > 0) {
                     //error case
                     fprintf(stderr, "Shnell: multiple lines error\n");
                     exit(EXIT_FAILURE);

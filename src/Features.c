@@ -24,19 +24,6 @@
 #define A10 10
 #define A11 11
 
-/**
- * The list of the available commands (the options are not listed here)
- */
-char *commands[] = {
-  "help",
-  "version",
-  "cd",
-  "pwd",
-  "ls",
-  "exit",
-  "led"
-};
-
 typedef struct { char *key; int val;} t_symstruct;
 
 /**
@@ -66,16 +53,6 @@ int keyFromString(t_symstruct **table,char *key) {
   }
   return BADKEY;
 }
-
-int (*builtin_features[])(char **) = {
-  &shnell_help,
-  &shnell_version,
-  &shnell_pwd,
-  &shnell_ls,
-  &shnell_cd,
-  &shnell_exit,
-  &shnell_led
-};
 
 int builtinLength() {
   return sizeof(commands)/sizeof(char *);
