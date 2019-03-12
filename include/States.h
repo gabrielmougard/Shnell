@@ -4,6 +4,8 @@
  * \brief States.h is basically an implementation of an HashMap ADT thought for storing
  * the states of the LEDs (value), with their associated <led_id> (key).
  */
+#ifndef _STATES_
+#define _STATES_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,7 +28,7 @@ typedef struct stateNode {
   pid_t pidKey;
   int key;
   bool state;
-  stateNode *next;
+  struct stateNode *next;
 
 } stateNode;
 
@@ -67,7 +69,7 @@ int hashCode(stateTable *t, int key);
  *
  * \return void
  */
-void insert(stateTable *t, int key, bool state);
+void insert(stateTable *t, int key, bool state, pid_t pid);
 
 /**
  * Searchs for the specified key in the table.
@@ -95,3 +97,5 @@ void sumUp(stateTable *t);
  * \return pid_t the associated PID.
  */
 pid_t getPid(stateTable *t,int key);
+
+#endif

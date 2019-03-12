@@ -4,13 +4,14 @@
  * \brief Node.h is a way to store generic things with a dynamic storage.
  * Indeed, we do not want to have a limited buffer size when entering a command.
  */
-
+#ifndef _NODE_
+#define _NODE_
 #include <stdio.h>
 #include <stdlib.h>
 
 typedef struct Node {
     char *content;
-    Node *next;
+    struct Node *next;
 } Node;
 
 /**
@@ -22,15 +23,15 @@ typedef struct Node {
  * \param size_t size of the data to be added
  * \return void
  */
-void push(Node** headRef, int *newContent, size_t contentSize);
+void push(Node** headRef, char *newContent, size_t contentSize);
 
 /**
  * This function prints the LinkedList
  *
  * \param Node the starting node
- * \return void
+ * \return char*
  */
-void linkedListToArray(Node *node);
+char *linkedListToArray(Node *node);
 
 /**
  * This function prints an integer
@@ -55,3 +56,5 @@ int getCount(Node* head);
  * \return int since content of a node is int
  */
 int popLast(Node* head);
+
+#endif

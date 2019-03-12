@@ -1,6 +1,7 @@
 # Shnell - A Shell Snips challenge
 
-This shell implementation is meant to be translated or ported on ARM Cortex class MCU. The task is to write a C program using stdin/stdout to implement a shell with the following command :
+This shell implementation is meant to be translated or ported on ARM Cortex class MCU. The task is to write a C program using stdin/stdout to implement a shell with the commands specified in the __CLI main features__ and in __CLI bonus features__ part.
+
 ## Operating system
 
 Currently, the program is only compatible with Linux systems. (tested on Ubuntu 18.04)

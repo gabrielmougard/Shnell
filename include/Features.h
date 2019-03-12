@@ -4,6 +4,9 @@
  * \brief Features.h groups builtin features (commands) available in the shell.
  */
 
+#ifndef _FEATURES_
+#define _FEATURES_
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -75,3 +78,25 @@ int shnell_led(char **args);
  * \return int
  */
 int builtinLength(void);
+
+int (*builtin_features[])(char **) = {
+  &shnell_help,
+  &shnell_version,
+  &shnell_pwd,
+  &shnell_ls,
+  &shnell_cd,
+  &shnell_exit,
+  &shnell_led
+};
+
+char *commands[] = {
+  "help",
+  "version",
+  "cd",
+  "pwd",
+  "ls",
+  "exit",
+  "led"
+};
+
+#endif

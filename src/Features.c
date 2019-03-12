@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <signal.h>
 #include <dirent.h>
 
 #define VERSION "1.0"
@@ -46,12 +47,12 @@ static t_symstruct lookupTable[] = {
   {"No options",A1}, {"No options",A2}, {"specified directory (e.g : /home/gab/)",A3},
   {"No options",A4}, {"No options",A5}, {"No options",A6}, {"on",A7}, {"off",A8}, {"start-blink",A9},
   {"stop-blink",A10}, {"status",A11}
-}
+};
 
 static t_symstruct options[] = {
   {"No options",1}, {"No options",2}, {"specified directory (e.g : /home/gab/)",3},
   {"No options",4}, {"No options",5}, {"No options",6}, {"'on' or 'off' : choose the state and if not created, create it.\n'start-blink <delay>' or 'stop-blink <delay>' : start/stop blinking a led in a new terminal with delay between each blink.\n'status' : print the status of all the LEDs",7}
-}
+};
 
 #define NKEYS (sizeof(lookupTable)/sizeof(t_symstruct))
 #define NOPTIONS (sizeof(options)/sizeof(t_symstruct))
@@ -99,10 +100,9 @@ int shnell_help(char **args) {
   for (int i = 0; i < NOPTIONS; i++) {
     sprintf(buff,"%d",i);
     printf(" %s | options : %s\n", commands[i], keyFromString(options,buff));
-  ));
   }
 
-  printf("See the official documentation at : https://www.github.com/gabrielmougard/Shnell/doc.pdf\n", );
+  printf("See the official documentation at : https://www.github.com/gabrielmougard/Shnell/doc.pdf\n");
   printf("\033[0m;");
   return 1;
 }
@@ -160,18 +160,18 @@ int shnell_ls(char **args) {
       return 1;
     }
 
-    while ((myfile = readdir(directory)) != NULL) {
+    while ((myFile = readdir(directory)) != NULL) {
 
       if (args[1] == NULL) {
 
-        sprintf(buf, "%s/%s", getenv("PWD"), myfile->d_name);
+        sprintf(buf, "%s/%s", getenv("PWD"), myFile->d_name);
       }
       else {
-        sprintf(buf, "%s/%s", args[1], myfile->d_name);
+        sprintf(buf, "%s/%s", args[1], myFile->d_name);
       }
       stat(buf, &mystat);
       printf("%zu",mystat.st_size);
-      printf(" %s\n",myfile->d_name);
+      printf(" %s\n",myFile->d_name);
 
     }
     closedir(directory);
@@ -210,7 +210,7 @@ int isNumber(char *array) {
 
 
 int shnell_led(char **args) {
-  //TODO
+
   if (args[1] == NULL) {
     //error : missing arguments
     printf("\033[1;31m");
@@ -218,6 +218,13 @@ int shnell_led(char **args) {
     printf("\033[0m;");
     return 1;
   }
+
+  //define 's' here
+  int s;
+  if (args[2] != NULL && isNumber(args[2])) {
+    s = lookup(STATES,atoi(args[2]));
+  }
+  //
 
   switch(keyFromString(lookupTable,args[1])) {
     case A7: //on
@@ -248,7 +255,7 @@ int shnell_led(char **args) {
       }
 
       //check if it already exists. If not, create it.
-      int s = lookup(STATES,atoi(args[2]));
+
       if ( s == -1) { // <led_id> do not exists
 
         insert(STATES,atoi(args[2]),1,NULL);
@@ -298,7 +305,6 @@ int shnell_led(char **args) {
       }
 
       //check if it already exists. If not, create it.
-      int s = lookup(STATES,atoi(args[2]));
       if ( s == -1) { // <led_id> do not exists
 
         insert(STATES,atoi(args[2]),0,NULL);

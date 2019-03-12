@@ -6,6 +6,8 @@
 
 #include "Node.h"
 #include "States.h"
+#include "Shared.h"
+#include "Features.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,38 +23,12 @@ int main(int argc, char **argv) {
     //for the sake of beauty even in the poor graphical environment of the terminal !
     printBanner();
 
+    initializeStates();
     //launch the shell loop with the specified configuration
     launchShell();
 
     //exit with success
     return EXIT_SUCCESS;
-}
-
-/**
- * launchShell initialize the process of reading the current line, then call the line parser
- * and finally execute the command while checking the exited variable to see if the program must end.
- *
- * \param void
- * \return void
- */
-void launchShell(void) {
-    Node* command;
-    char** args;
-
-    bool exited = false;
-
-    while(!exited) {
-        printf("\033[1;31m");
-        printf(">>> ");
-        printf("\033[0m;");
-
-        command = readCommand();
-        args = readArgs(command);
-        exited = executeCommand(args);
-
-        free(command);
-        free(args);
-    }
 }
 
 /**
@@ -131,6 +107,33 @@ char **readArgs(Node *command) {
 }
 
 /**
+ * launchShell initialize the process of reading the current line, then call the line parser
+ * and finally execute the command while checking the exited variable to see if the program must end.
+ *
+ * \param void
+ * \return void
+ */
+void launchShell(void) {
+    Node* command;
+    char** args;
+
+    bool exited = false;
+
+    while(!exited) {
+        printf("\033[1;31m");
+        printf(">>> ");
+        printf("\033[0m;");
+
+        command = readCommand();
+        args = readArgs(command);
+        exited = executeCommand(args);
+
+        free(command);
+        free(args);
+    }
+}
+
+/**
  * Launch the shell process
  *
  * \param char** the arguments of the command
@@ -155,7 +158,7 @@ int shnellLaunch(char **args) {
         //parent process
         do {
             waitPid = waitpid(pid,&status,WUNTRACED);
-        } while (!WIFEXITED(staus) && !WIFSIGNALED(status));
+        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
     }
 
     return 1;
@@ -174,7 +177,7 @@ int executeCommand(char **args) {
     }
 
     for (int i = 0; i < builtinLength(); i++) {
-        if (strcmp(args[0],builtin_cmd[i]) == 0) {
+        if (strcmp(args[0],commands[i]) == 0) {
             return (*builtin_features[i])(args);
         }
     }
@@ -194,7 +197,7 @@ void printBanner(void) {
     char ch, file_name[25];
 	FILE *fp;
 
-	fp = fopen("banner","r"); //this file will be pasted in the same directory of the binaries 
+	fp = fopen("banner","r"); //this file will be pasted in the same directory of the binaries
 
 	if (fp == NULL) {
 		perror("Error while opening the file.\n");
@@ -208,4 +211,8 @@ void printBanner(void) {
   printf("\n");
 	fclose(fp);
 
+}
+
+void initializeStates(void) {
+  stateTable *STATES = createTable(50);
 }
