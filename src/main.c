@@ -6,6 +6,7 @@
 
 #include "Node.h"
 #include "States.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -48,6 +49,7 @@ void launchShell(void) {
         command = readCommand();
         args = readArgs(command);
         exited = executeCommand(args);
+        
         free(command);
         free(args);
     }

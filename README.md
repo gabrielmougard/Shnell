@@ -23,9 +23,9 @@ This shell implementation is meant to be translated or ported on ARM Cortex clas
 
 ## How to install
 
-* install xterm (usually, it's already installed on UNIX systems)
-With GCC... duh !
-(Coming soon)
+Type the following command in the project directory (in root priviledge) :
+`make` and `make install`.
+Then you can type `shnell` in a terminal to launch the program.
 
 ## Portability to MCU
 
