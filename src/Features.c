@@ -382,7 +382,7 @@ int shnell_led(char **args) {
           // args[2] which is the <led_id> is the second argument.
           // args[3] which is the <delay> is the third argument.
           if (pid == 0) { //success in forking
-            execl("/usr/bin/xterm","xterm","./blink.out",pid,args[2],args[3],NULL);
+            execl("/usr/bin/xterm","xterm","./blink.o",pid,args[2],args[3],NULL);
 
             //save pid to STATES
             insert(STATES,atoi(args[2]),1,pid);

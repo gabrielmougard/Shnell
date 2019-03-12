@@ -3,8 +3,8 @@
 #include <unistd.h>
 
 int main(int argc, char *argv[]) {
-    char* one = "../res/one";
-    char* zero = "..res/zero";
+    char* one = "one"; //this file will be pasted into the same folder of binary
+    char* zero = "zero"; //this file will be pasted into the same folder of binary
 
     int delay = atoi(argv[2]);//recover the parameter of delay
     int pid = atoi(argv[0]);//recover the PID

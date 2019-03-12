@@ -49,7 +49,7 @@ void launchShell(void) {
         command = readCommand();
         args = readArgs(command);
         exited = executeCommand(args);
-        
+
         free(command);
         free(args);
     }
@@ -194,7 +194,7 @@ void printBanner(void) {
     char ch, file_name[25];
 	FILE *fp;
 
-	fp = fopen("../res/banner","r");
+	fp = fopen("banner","r"); //this file will be pasted in the same directory of the binaries 
 
 	if (fp == NULL) {
 		perror("Error while opening the file.\n");
