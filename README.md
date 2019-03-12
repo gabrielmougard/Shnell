@@ -1,6 +1,21 @@
 # Shnell - A Shell Snips challenge
 
 This shell implementation is meant to be translated or ported on ARM Cortex class MCU. The task is to write a C program using stdin/stdout to implement a shell with the following command :
+## Operating system
+
+Currently, the program is only compatible with Linux systems. (tested on Ubuntu 18.04)
+
+## Dependencies
+
+(By default, all of these dependencies are installed by default but if you encounter a problem during the building process, refer to this)
+
+ * xterm
+ * stdio.h
+ * stdlib.h
+ * unistd.h
+ * sys/types.h
+ * sys/stat.h
+ * dirent.h
 
 ## CLI main features
 
@@ -39,6 +54,6 @@ I found some interesting ressources and I heavily relied on them (at first) to b
 Then, I decided to implement my own abstract data types for some tasks (e.g : the Node structure, to have a LinkedList containing the written command and not a simple buffer
 because of the fixed size of this one). I end up coding the simplest features first (the `version` command, the `pwd` command, etc...) and finally, once I had done the `led status`, `led on`, and `led off` commands, things were just starting to get fun...
 I just can't figure out how to do the 'blinking' process without stopping the main program. I got stuck into this particular problem for a couple of days, but I decided to go for some inefficient solutions since I was running out of ideas...
-I decided to use child processes (with `fork()`) in an other terminal to simulate the LED. Actually, for each blinking LED, there is one associated terminal with a fancy blinking icon and the PID ! Currently, I'm still debugging the codebase. I hope I will solve the main issues.
+I decided to use child processes (with `fork()`) in an other terminal to simulate the LED. Actually, for each blinking LED, there is one associated terminal with a fancy blinking icon and the PID ! Then I add to do a Makefile in order to build the project. Currently, I'm still debugging the codebase. I hope I will solve the main issues.
 
 Cheers !
