@@ -6,7 +6,6 @@
 
 #include "Node.h"
 #include "States.h"
-#include "Shared.h"
 #include "Features.h"
 
 #include <stdio.h>
@@ -23,7 +22,7 @@ int main(int argc, char **argv) {
     //for the sake of beauty even in the poor graphical environment of the terminal !
     printBanner();
 
-    initializeStates();
+    //initializeStates();
     //launch the shell loop with the specified configuration
     launchShell();
 

@@ -199,7 +199,7 @@ int shnell_led(char **args) {
   //define 's' here
   int s;
   if (args[2] != NULL && isNumber(args[2])) {
-    s = lookup(STATES,atoi(args[2]));
+    s = lookup(atoi(args[2]));
   }
   //
 
@@ -235,20 +235,20 @@ int shnell_led(char **args) {
 
       if ( s == -1) { // <led_id> do not exists
 
-        insert(STATES,atoi(args[2]),1,NULL);
+        insert(atoi(args[2]),-1,1);
         printf("\033[1;33m"); //yellow color
         printf("The LED %s has been created and is on\n",args[2]);
         printf("\n");
       }
       else {
         //it exists, then check the state and if it's off, put it on. If it's already on, trigger the user and keep the same state
-        if (lookup(STATES,atoi(args[2])) == 1) { //it was on
+        if (lookup(atoi(args[2])) == 1) { //it was on
           printf("\033[1;33m"); //yellow color
           printf("The LED %s was already on\n",args[2]);
           printf("\n");
         }
         else { //it was off
-          insert(STATES,atoi(args[2]),1,NULL);
+          insert(atoi(args[2]),-1,1);
           printf("\033[1;33m"); //yellow color
           printf("The LED %s has been switched on\n",args[2]);
           printf("\n");
@@ -284,15 +284,15 @@ int shnell_led(char **args) {
       //check if it already exists. If not, create it.
       if ( s == -1) { // <led_id> do not exists
 
-        insert(STATES,atoi(args[2]),0,NULL);
+        insert(atoi(args[2]),-1,0);
         printf("\033[1;33m"); //yellow color
         printf("The LED %s has been created and is off\n",args[2]);
         printf("\n");
       }
       else {
         //it exists, then check the state and if it's off, put it on. If it's already on, trigger the user and keep the same state
-        if (lookup(STATES,atoi(args[2])) == 1) { //it was on
-          insert(STATES,atoi(args[2]),0,NULL);
+        if (lookup(atoi(args[2])) == 1) { //it was on
+          insert(atoi(args[2]),-1,0);
           printf("\033[1;33m"); //yellow color
           printf("The LED %s has been switched off\n",args[2]);
           printf("\n");
@@ -339,7 +339,7 @@ int shnell_led(char **args) {
       }
 
       //check before if the led was created before starting forking process in xterm
-      if(lookup(STATES,atoi(args[2])) == -1) {
+      if(lookup(atoi(args[2])) == -1) {
         //error : LED not created
         printf("\033[1;31m");
         printf("Error : This led hasn't been created yet. Use 'led on <led_id>' to create one.\n");
@@ -348,7 +348,7 @@ int shnell_led(char **args) {
       }
       else {
         //check the state. If the state is on, do the blinking. Else, print error.
-        if(lookup(STATES,atoi(args[2])) == 0) { //led is off
+        if(lookup(atoi(args[2])) == 0) { //led is off
           //error : LED not created
           printf("\033[1;31m");
           printf("Error : This led is off. Use 'led on <led_id>' to switch it on.\n");
@@ -365,10 +365,10 @@ int shnell_led(char **args) {
           // args[2] which is the <led_id> is the second argument.
           // args[3] which is the <delay> is the third argument.
           if (pid == 0) { //success in forking
-            execl("/usr/bin/xterm","xterm","./blink.o",pid,args[2],args[3],NULL);
+            execl("/usr/bin/xterm","xterm","blink",pid,args[2],args[3],NULL); //blink is the name of the command since it will be pasted in /usr/local/bin
 
             //save pid to STATES
-            insert(STATES,atoi(args[2]),1,pid);
+            insert(atoi(args[2]),pid,1);
           }
           else {
             //error : fork not successful
@@ -399,7 +399,7 @@ int shnell_led(char **args) {
         break;
       }
 
-      if (lookup(STATES,atoi(args[2])) == -1) {
+      if (lookup(atoi(args[2])) == -1) {
         //error : the <led_id> doesn't exists
         printf("\033[1;31m");
         printf("Error : The <led_id> doesn't exists.\n");
@@ -407,7 +407,7 @@ int shnell_led(char **args) {
         break;
       }
 
-      pid_t pidKey = getPid(STATES,atoi(args[2]));
+      pid_t pidKey = getPid(atoi(args[2]));
       printf("\033[1;33m"); //yellow color
       printf("The LED %s has been stopped\n",args[2]);
       printf("\n");
@@ -426,7 +426,7 @@ int shnell_led(char **args) {
         break;
       }
 
-      sumUp(STATES);
+      sumUp();
 
 
     case BADKEY:
