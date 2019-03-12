@@ -1,3 +1,6 @@
+#Create bin directory
+$(shell mkdir bin)
+
 #configure file directories
 BIN_DIR=bin
 SRC_DIR=src
