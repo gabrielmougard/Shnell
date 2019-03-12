@@ -1,6 +1,3 @@
-#Create bin directory
-$(shell mkdir bin)
-
 #configure file directories
 BIN_DIR=bin
 SRC_DIR=src
@@ -26,6 +23,6 @@ $(BIN_DIR)/%.o: $(SRC_DIR)/%.c
 
 install:
 	cp $(BIN_DIR)/*.o $(TARGETBIN)
-	cp $(RES)/one $(TARGETBIN) # paste binary text ressources
-	cp $(RES)/zero $(TARGETBIN) # paste binary text ressources
-	cp $(RES)/banner $(TARGETBIN) # paste binary text ressources
+	cp $(BIN_DIR)/one $(TARGETBIN) # paste binary text ressources
+	cp $(BIN_DIR)/zero $(TARGETBIN) # paste binary text ressources
+	cp $(BIN_DIR)/banner $(TARGETBIN) # paste binary text ressources
