@@ -6,8 +6,8 @@ int main(int argc, char *argv[]) {
     char* one = "one"; //this file will be pasted into the same folder of binary
     char* zero = "zero"; //this file will be pasted into the same folder of binary
 
-    int delay = atoi(argv[2]);//recover the parameter of delay
-    int pid = atoi(argv[0]);//recover the PID
+    int delay = atoi(argv[3]);//recover the parameter of delay
+    int pid = atoi(argv[2]);//recover the PID
     int led_id = atoi(argv[1]);//recover the <led_id>
 
     while(1) {
