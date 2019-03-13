@@ -57,4 +57,6 @@ because of the fixed size of this one). I end up coding the simplest features fi
 I just can't figure out how to do the 'blinking' process without stopping the main program. I got stuck into this particular problem for a couple of days, but I decided to go for some inefficient solutions since I was running out of ideas...
 I decided to use child processes (with `fork()`) in an other terminal to simulate the LED. Actually, for each blinking LED, there is one associated terminal with a fancy blinking icon and the PID ! Then I add to do a Makefile in order to build the project. Currently, I'm still debugging the codebase. I hope I will solve the main issues.
 
+Wednesday the 13th of March 2019, the shell is around 85% functionnal. I'm still debugging the `led blink-start` and `led blink-stop` commands since I had a lot of segmentation faults. 
+
 Cheers !

@@ -87,6 +87,7 @@ void insert(int key, int pid, int state) {
 }
 
 void sumUp(void) {
+	printf("<LED_ID>\t<PID>\t<STATE>\n");
 	FILE *fp;
 	char str[200];
 	char delim[] ="\t";
