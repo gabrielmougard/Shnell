@@ -41,11 +41,12 @@ Currently, the program is only compatible with Linux systems. (tested on Ubuntu 
 
 Type the following command in the project directory :
 `chmod +x install.sh` and `sudo ./install.sh`. Then the build process will begin...
-Then you can type `shnell` in a terminal to launch the program, since it will be automatically added to your PATH.
+For instance, To execute the demo you can go in `shnell/bin` and type `./shnell`. 
 
 ## Portability to MCU
 
-Coming soon.
+All the libraries (`stdio.h`,`stdlib.h`,`string.h`,`stdio.h`,`signal.h`,`sys/types.h`,`sys/wait.h`,`unistd.h`) are portable on an RaspberryPi ARM processor ( see [this link](https://packages.debian.org/fr/sid/armhf/libc6-dev/filelist)). 
+So it already portable to MCU.
 
 ## Process story
 
@@ -57,6 +58,9 @@ because of the fixed size of this one). I end up coding the simplest features fi
 I just can't figure out how to do the 'blinking' process without stopping the main program. I got stuck into this particular problem for a couple of days, but I decided to go for some inefficient solutions since I was running out of ideas...
 I decided to use child processes (with `fork()`) in an other terminal to simulate the LED. Actually, for each blinking LED, there is one associated terminal with a fancy blinking icon and the PID ! Then I add to do a Makefile in order to build the project. Currently, I'm still debugging the codebase. I hope I will solve the main issues.
 
-Wednesday the 13th of March 2019, the shell is around 85% functionnal. I'm still debugging the `led blink-start` and `led blink-stop` commands since I had a lot of segmentation faults. 
+Wednesday the 13th of March 2019, the shell is around 85% functionnal. I'm still debugging the `led blink-start` and `led blink-stop` commands since I had a lot of segmentation faults.
+I am facing problems (seg fault) that I'm unable to solve for instance.. It seems that when I do `led on <some_id>` it works once and then if I want to do it again, here appear a seg fault.
+The blinking process work but since I had seg faults A cannot integrate this functionnality on the global project...
+To have a glimpse of the child process, you can go in `blinkingProc/bin` and type `./blink <LED_ID> <PID> <DELAY>` (the DELAY is in ms)... 
 
 Cheers !

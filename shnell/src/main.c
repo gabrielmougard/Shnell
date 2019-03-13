@@ -258,7 +258,6 @@ int shnell_led(char **args) {
         printf("\033[1;33m"); //yellow color
         printf("The LED #%s has been created and is on\n",arg2);
         printf("\033[0m");
-        printf("\n");
         return 1;
       }
       else {

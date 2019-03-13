@@ -3,14 +3,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 int lookup(int ledID) {
 
 	FILE *fp;
 	char str[200];
-	char *filename = "states.dat";
+	char *filename = "states";
 	char delim[] =" \t";
 
-	fp = fopen(filename,"r");
+	fp = fopen(filename,"rb");
 	if (fp == NULL) {
 		printf("could not open file %s",filename);
 		return 1;
@@ -22,6 +23,7 @@ int lookup(int ledID) {
 		if (atoi(ptr) == ledID) {
 			ptr = strtok(NULL,delim);
 			ptr = strtok(NULL,delim);
+			fclose(fp);
 			return atoi(ptr);
 		}
 		
@@ -37,16 +39,16 @@ void insert(int key, int pid, int state) {
 	FILE *tempFile;
 
 	char str[200];
-	char delim[] =" \t";
+	char delim[] ="\t";
 	int lineCount = 0;
 	int temp = 1;
 
 	if(lookup(key) == -1) {
-		fp = fopen("states.dat","a");
+		fp = fopen("states","wb");
 	}
 	else {
-		fp = fopen("states.dat","r");
-		tempFile = fopen("statesTemp.dat","w");
+		fp = fopen("states","rb");
+		tempFile = fopen("statesTemp","wb");
 	}
 	
 	//check if key already here
@@ -74,16 +76,18 @@ void insert(int key, int pid, int state) {
 			fprintf(tempFile,"%d\t%d\t%d\n",key,pid,state);
 			fclose(fp);
 			fclose(tempFile);
-			remove("states.dat");
-			rename("statesTemp.dat","states.dat");
+			remove("states");
+			rename("statesTemp","states");
 			return;
 
 		}
 		
 	}
+	
 
 	fprintf(fp,"%d\t%d\t%d\n",key,pid,state);
 	fclose(fp);
+
 }
 
 void sumUp(void) {
@@ -91,7 +95,7 @@ void sumUp(void) {
 	FILE *fp;
 	char str[200];
 	char delim[] ="\t";
-	fp = fopen("states.dat","r");
+	fp = fopen("states","r");
 
 	
 	while(fgets(str,200,fp) != NULL) {
@@ -107,7 +111,7 @@ void sumUp(void) {
 int getPid(int ledID) {
 	FILE *fp;
 	char str[200];
-	char *filename = "states.dat";
+	char *filename = "states";
 	char delim[] =" \t";
 
 	fp = fopen(filename,"r");
