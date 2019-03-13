@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 typedef int bool;
 #define true 1
@@ -45,7 +46,7 @@ Node *readCommand(void) {
     while(true) {
         //read the character
         current_c = getchar();
-
+        usleep(20000); //tempo
 
         if(current_c == '\n') {
             push(&start,&current_c,char_size);
@@ -121,7 +122,7 @@ void launchShell(void) {
     while(!exited) {
         printf("\033[1;31m");
         printf(">>> ");
-        printf("\033[0m;");
+        printf("\033[0m");
 
         command = readCommand();
         args = readArgs(command);

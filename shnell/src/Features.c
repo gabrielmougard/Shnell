@@ -61,7 +61,7 @@ int shnell_help(char **args) {
     //error : there's something after the 'help' command
     printf("\033[1;31m");
     printf("Error : there is no options after 'help' command.\n");
-    printf("\033[0m;");
+    printf("\033[0m");
     return 1; // don't escape but run on an other line
   }
 
@@ -87,7 +87,7 @@ int shnell_help(char **args) {
   }
 
   printf("See the official documentation at : https://www.github.com/gabrielmougard/Shnell/doc.pdf\n");
-  printf("\033[0m;");
+  printf("\033[0m");
   return 1;
 }
 
@@ -97,12 +97,12 @@ int shnell_version(char **args) {
     //error : there's something after the 'version' command
     printf("\033[1;31m");
     printf("Error : there is no options after 'version' command.\n");
-    printf("\033[0m;");
+    printf("\033[0m");
     return 1; // don't escape but run on an other line
   }
   printf("\033[1;33m"); //yellow color
   printf("Current version : %s\n",VERSION);
-  printf("\033[0m;");
+  printf("\033[0m");
 
   return 1;
 }
@@ -113,7 +113,7 @@ int shnell_pwd(char **args) {
     //error : there's something after the 'version' command
     printf("\033[1;31m");
     printf("Error : there is no options after 'pwd' command.\n");
-    printf("\033[0m;");
+    printf("\033[0m");
     return 1; // don't escape but run on an other line
   }
 
@@ -140,7 +140,7 @@ int shnell_ls(char **args) {
       //error : too many arguments
       printf("\033[1;31m");
       printf("Error : too many arguments in the 'ls' command. Type 'help' to show the available options.\n");
-      printf("\033[0m;");
+      printf("\033[0m");
       return 1;
     }
 
@@ -167,7 +167,7 @@ int shnell_exit(char **args) {
     //error : too many arguments
     printf("\033[1;31m");
     printf("Error : too many arguments in the 'exit' command. Did you mean 'exit'?\n");
-    printf("\033[0m;");
+    printf("\033[0m");
     return 1;
   }
 
@@ -176,8 +176,27 @@ int shnell_exit(char **args) {
 }
 
 int shnell_cd(char **args) {
-  //TODO
+  
+  if (args[1] == NULL) {
+    //error : missing argument
+    printf("\033[1;31m");
+    printf("Error : missing argument in the 'cd' command : precise the path\n");
+    printf("\033[0m");
+    return 1;
+  }
+  char path[200];
+  strcpy(path,args[1]);
 
+  char cwd[200];
+  if(strcmp(args[1][0],'/') != 0) {
+    getcwd(cwd,sizeof(cwd));
+    strcat(cwd,"/");
+    strcat(cwd,path);
+    chdir(cwd);
+  } else {
+    chdir(args[1]);
+  }
+  return 1;
 
 }
 
@@ -199,7 +218,7 @@ int shnell_led(char **args) {
     //error : missing arguments
     printf("\033[1;31m");
     printf("Error : missing arguments in the 'led' command. Use 'help' to see the documentation.\n");
-    printf("\033[0m;");
+    printf("\033[0m");
     return 1;
   }
 
@@ -216,7 +235,7 @@ int shnell_led(char **args) {
         //error : <led_id> not present
         printf("\033[1;31m");
         printf("Error : missing arguments in the 'led' command : <led_id>. Use 'help' to see the documentation.\n");
-        printf("\033[0m;");
+        printf("\033[0m");
         break;
       }
 
@@ -224,7 +243,7 @@ int shnell_led(char **args) {
         //error : <led_id> not present
         printf("\033[1;31m");
         printf("Error : too many arguments in the 'led' command. Use 'help' to see the documentation.\n");
-        printf("\033[0m;");
+        printf("\033[0m");
         break;
       }
 
@@ -234,7 +253,7 @@ int shnell_led(char **args) {
         //error : <led_id> is not a number
         printf("\033[1;31m");
         printf("Error : <led_id> must be an integer. Use 'help' to see the documentation.\n");
-        printf("\033[0m;");
+        printf("\033[0m");
         break;
       }
 
@@ -245,6 +264,7 @@ int shnell_led(char **args) {
         insert(atoi(args[2]),-1,1);
         printf("\033[1;33m"); //yellow color
         printf("The LED %s has been created and is on\n",args[2]);
+        printf("\033[0m");
         printf("\n");
       }
       else {
@@ -252,12 +272,14 @@ int shnell_led(char **args) {
         if (lookup(atoi(args[2])) == 1) { //it was on
           printf("\033[1;33m"); //yellow color
           printf("The LED %s was already on\n",args[2]);
+          printf("\033[0m");
           printf("\n");
         }
         else { //it was off
           insert(atoi(args[2]),-1,1);
           printf("\033[1;33m"); //yellow color
           printf("The LED %s has been switched on\n",args[2]);
+          printf("\033[0m");
           printf("\n");
         }
       }
@@ -268,7 +290,7 @@ int shnell_led(char **args) {
         //error : <led_id> not present
         printf("\033[1;31m");
         printf("Error : missing arguments in the 'led' command : <led_id>. Use 'help' to see the documentation.\n");
-        printf("\033[0m;");
+        printf("\033[0m");
         break;
       }
 
@@ -276,7 +298,7 @@ int shnell_led(char **args) {
         //error : <led_id> not present
         printf("\033[1;31m");
         printf("Error : too many arguments in the 'led' command. Use 'help' to see the documentation.\n");
-        printf("\033[0m;");
+        printf("\033[0m");
         break;
       }
 
@@ -284,7 +306,7 @@ int shnell_led(char **args) {
         //error : <led_id> is not a number
         printf("\033[1;31m");
         printf("Error : <led_id> must be an integer. Use 'help' to see the documentation.\n");
-        printf("\033[0m;");
+        printf("\033[0m");
         break;
       }
 
@@ -294,6 +316,7 @@ int shnell_led(char **args) {
         insert(atoi(args[2]),-1,0);
         printf("\033[1;33m"); //yellow color
         printf("The LED %s has been created and is off\n",args[2]);
+        printf("\033[0m");
         printf("\n");
       }
       else {
@@ -302,11 +325,13 @@ int shnell_led(char **args) {
           insert(atoi(args[2]),-1,0);
           printf("\033[1;33m"); //yellow color
           printf("The LED %s has been switched off\n",args[2]);
+          printf("\033[0m");
           printf("\n");
         }
         else { //it was off
           printf("\033[1;33m"); //yellow color
           printf("The LED %s was already off\n",args[2]);
+          printf("\033[0m");
           printf("\n");
         }
       }
@@ -317,7 +342,7 @@ int shnell_led(char **args) {
         //error : missing argument
         printf("\033[1;31m");
         printf("Error : missing argument in the 'led start-blink' command : <led_id>. Use 'help' to see the documentation.\n");
-        printf("\033[0m;");
+        printf("\033[0m");
         break;
       }
 
@@ -325,7 +350,7 @@ int shnell_led(char **args) {
         //error : <led_id> is not a number
         printf("\033[1;31m");
         printf("Error : <led_id> must be an integer. Use 'help' to see the documentation.\n");
-        printf("\033[0m;");
+        printf("\033[0m");
         break;
       }
 
@@ -333,7 +358,7 @@ int shnell_led(char **args) {
         //error : missing argument
         printf("\033[1;31m");
         printf("Error : missing argument in the 'led start-blink' command : <delay>. Use 'help' to see the documentation.\n");
-        printf("\033[0m;");
+        printf("\033[0m");
         break;
       }
 
@@ -341,7 +366,7 @@ int shnell_led(char **args) {
         //error : <delay> is not a number
         printf("\033[1;31m");
         printf("Error : <delay> must be an integer (in ms). Use 'help' to see the documentation.\n");
-        printf("\033[0m;");
+        printf("\033[0m");
         break;
       }
 
@@ -350,7 +375,7 @@ int shnell_led(char **args) {
         //error : LED not created
         printf("\033[1;31m");
         printf("Error : This led hasn't been created yet. Use 'led on <led_id>' to create one.\n");
-        printf("\033[0m;");
+        printf("\033[0m");
         break;
       }
       else {
@@ -359,7 +384,7 @@ int shnell_led(char **args) {
           //error : LED not created
           printf("\033[1;31m");
           printf("Error : This led is off. Use 'led on <led_id>' to switch it on.\n");
-          printf("\033[0m;");
+          printf("\033[0m");
           break;
         }
         else { //led is on, then do the blinking.
@@ -381,7 +406,7 @@ int shnell_led(char **args) {
             //error : fork not successful
             printf("\033[1;31m");
             printf("Error : Blinking child process failed\n");
-            printf("\033[0m;");
+            printf("\033[0m");
             break;
           }
 
@@ -394,7 +419,7 @@ int shnell_led(char **args) {
         //error : missing argument
         printf("\033[1;31m");
         printf("Error : missing argument in the 'led stop-blink' command : <led_id>. Use 'help' to see the documentation.\n");
-        printf("\033[0m;");
+        printf("\033[0m");
         break;
       }
 
@@ -402,7 +427,7 @@ int shnell_led(char **args) {
         //error : <led_id> is not a number
         printf("\033[1;31m");
         printf("Error : <led_id> must be an integer. Use 'help' to see the documentation.\n");
-        printf("\033[0m;");
+        printf("\033[0m");
         break;
       }
 
@@ -410,13 +435,14 @@ int shnell_led(char **args) {
         //error : the <led_id> doesn't exists
         printf("\033[1;31m");
         printf("Error : The <led_id> doesn't exists.\n");
-        printf("\033[0m;");
+        printf("\033[0m");
         break;
       }
 
       pid_t pidKey = getPid(atoi(args[2]));
       printf("\033[1;33m"); //yellow color
       printf("The LED %s has been stopped\n",args[2]);
+      printf("\033[0m");
       printf("\n");
 
       //kill effectively the process
@@ -429,7 +455,7 @@ int shnell_led(char **args) {
         //error : too many arguments
         printf("\033[1;31m");
         printf("Error : too many arguments in the 'led staus' command. Use 'help' to see the documentation.\n");
-        printf("\033[0m;");
+        printf("\033[0m");
         break;
       }
 
@@ -440,7 +466,7 @@ int shnell_led(char **args) {
       //error : wrong argument
       printf("\033[1;31m");
       printf("Error : wrong arguments in the 'led' command. Use 'help' to see the documentation.\n");
-      printf("\033[0m;");
+      printf("\033[0m");
       break;
 
   }
