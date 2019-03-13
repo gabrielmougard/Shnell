@@ -103,7 +103,7 @@ void sumUp(void) {
 	}
 }
 
-int getPid(char* ledID) {
+int getPid(int ledID) {
 	FILE *fp;
 	char str[200];
 	char *filename = "states.dat";
@@ -118,7 +118,7 @@ int getPid(char* ledID) {
 	while(fgets(str,200,fp) != NULL) {
 		
 		char *ptr =strtok(str,delim);
-		if (strcmp(ptr,ledID) == 0) {
+		if (atoi(ptr) == ledID) {
 			ptr = strtok(NULL,delim);
 			return atoi(ptr);
 		}

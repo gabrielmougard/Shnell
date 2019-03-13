@@ -10,7 +10,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "Shared.h"
 
 /**
  * The list of built-in commands of Shnell
@@ -71,32 +70,5 @@ int shnell_version(char **args);
  */
 int shnell_led(char **args);
 
-/**
- * Returns the length of the builtin features array
- *
- * \param void
- * \return int
- */
-int builtinLength(void);
-
-int (*builtin_features[])(char **) = {
-  &shnell_help,
-  &shnell_version,
-  &shnell_pwd,
-  &shnell_ls,
-  &shnell_cd,
-  &shnell_exit,
-  &shnell_led
-};
-
-char *commands[] = {
-  "help",
-  "version",
-  "cd",
-  "pwd",
-  "ls",
-  "exit",
-  "led"
-};
 
 #endif

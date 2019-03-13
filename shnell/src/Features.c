@@ -44,6 +44,7 @@ static t_symstruct options[] = {
 #define NKEYS (sizeof(lookupTable)/sizeof(t_symstruct))
 #define NOPTIONS (sizeof(options)/sizeof(t_symstruct))
 
+
 int keyFromString(t_symstruct **table,char *key) {
   int i;
   for (i = 0; i < NKEYS; i++) {
@@ -52,10 +53,6 @@ int keyFromString(t_symstruct **table,char *key) {
       return sym->val;
   }
   return BADKEY;
-}
-
-int builtinLength() {
-  return sizeof(commands)/sizeof(char *);
 }
 
 int shnell_help(char **args) {
@@ -74,9 +71,19 @@ int shnell_help(char **args) {
 
   char* buff; //store the key for retreiving options
 
+  char* availableCommands[] = {
+    "help",
+    "version",
+    "cd",
+    "pwd",
+    "ls",
+    "exit",
+    "led"
+  };
+
   for (int i = 0; i < NOPTIONS; i++) {
     sprintf(buff,"%d",i);
-    printf(" %s | options : %s\n", commands[i], keyFromString(options,buff));
+    printf(" %s | options : %s\n", availableCommands[i], keyFromString(options,buff));
   }
 
   printf("See the official documentation at : https://www.github.com/gabrielmougard/Shnell/doc.pdf\n");

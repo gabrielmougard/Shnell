@@ -163,6 +163,10 @@ int shnellLaunch(char **args) {
     return 1;
 }
 
+int builtinLength(char **commands) {
+  return sizeof(commands)/sizeof(char *);
+}
+
 /**
  * Execute the entered command and calls the right builtin feature function.
  *
@@ -170,12 +174,30 @@ int shnellLaunch(char **args) {
  * \return int
  */
 int executeCommand(char **args) {
+    char *commands[] = {
+        "help",
+        "version",
+        "cd",
+        "pwd",
+        "ls",
+        "exit",
+        "led"
+    };
+    int (*builtin_features[])(char **) = {
+        &shnell_help,
+        &shnell_version,
+        &shnell_pwd,
+        &shnell_ls,
+        &shnell_cd,
+        &shnell_exit,
+        &shnell_led
+    };
     if (args[0] == NULL) {
         //empty command
         return 1;
     }
 
-    for (int i = 0; i < builtinLength(); i++) {
+    for (int i = 0; i < builtinLength(commands); i++) {
         if (strcmp(args[0],commands[i]) == 0) {
             return (*builtin_features[i])(args);
         }
@@ -210,8 +232,4 @@ void printBanner(void) {
   printf("\n");
 	fclose(fp);
 
-}
-
-void initializeStates(void) {
-  stateTable *STATES = createTable(50);
 }

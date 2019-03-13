@@ -39,9 +39,9 @@ Currently, the program is only compatible with Linux systems. (tested on Ubuntu 
 
 ## How to install
 
-Type the following command in the project directory (in root priviledge) :
-`make` and `make install`.
-Then you can type `shnell` in a terminal to launch the program.
+Type the following command in the project directory :
+`chmod +x install.sh` and `sudo ./install.sh`. Then the build process will begin...
+Then you can type `shnell` in a terminal to launch the program, since it will be automatically added to your PATH.
 
 ## Portability to MCU
 
