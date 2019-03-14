@@ -17,6 +17,8 @@ int main(int argc, char *argv[]) {
       usleep(1000*delay);
       printLetter(zero,pid,led_id);
     }
+    
+    return 0;
 }
 
 void printLetter(char* filename, int pid, int led_id) {

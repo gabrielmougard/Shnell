@@ -25,20 +25,27 @@ void append(struct Node** head_ref,int ledId,int pid, int state) {
        *head_ref = new_node; 
        return; 
     } 
-  
+    
+
     /* 5. Else traverse till the last node */
     while (last->next != NULL) {
-
+        
         if (last->ledId == ledId) { //if the specified ledId is already present, modify the present node
             //modify the pid and the state
             last->pid = pid;
             last->state = state;
             return;
         }
+        
 
         last = last->next; 
     }
     /* 6. Change the next of last node */
+    if (last->ledId == ledId) {
+        last->pid = pid;
+        last->state = state;
+        return;
+    }
     last->next = new_node; 
     return; 
 }

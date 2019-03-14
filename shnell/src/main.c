@@ -373,16 +373,18 @@ int shnell_led(char **args, struct Node* head) {
         return 1;
       }
       else { //led is on, then do the blinking.
-
+        
         //create pid
-        pid_t pid = fork();
+        pid_t pid ;
+        pid = fork();
 
         //execute child process
         // pid is the first argument of our blink.out process
         // args[2] which is the <led_id> is the second argument.
         // args[3] which is the <delay> is the third argument.
         if (pid == 0) { //success in forking
-          execl("/usr/bin/xterm","xterm","blink",pid,arg2,arg3,NULL); //blink is the name of the command since it will be pasted in /usr/local/bin
+          char *command[] = {"cd ../../blinkingProc/bin && ./blink",arg2,pid,arg3};
+          execvp("sh",command); //blink is the name of the command since it will be pasted in /usr/local/bin
 
           //save pid to STATES
           append(&head,atoi(arg2),pid,1);

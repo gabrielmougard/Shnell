@@ -63,4 +63,11 @@ I am facing problems (seg fault) that I'm unable to solve for instance.. It seem
 The blinking process work but since I had seg faults A cannot integrate this functionnality on the global project...
 To have a glimpse of the child process, you can go in `blinkingProc/bin` and type `./blink <LED_ID> <PID> <DELAY>` (the DELAY is in ms)... 
 
+Thursday the 14th of March 2019 : Finally ! I get rid of the problem ! Instead of using a file storage system for the structure (ledId,PID,state), I decided to implement an internal storage using Node in a LinkedList. However, when I type `led status`, the two first lines are very strange but when adding leds with `led on <LED_ID>` or `led off <LED_ID>` , it works. Now I have to get rid of small bugs and I will be good to go.
+
+Thursday the 14th of March 2019 : I don't understand why the blinking child process is not starting when calling `led start-blink <LED_ID> <DELAY>` (DELAY in ms).
+The list of errors can be found [here](man7.org/linux/man-pages/man2/fork2.html). Of course, if `led start-blink` is unsuccessful, it is the same for `led stop-blink`.
+
+However, all the other features are working (even the bonus ones)
+
 Cheers !
