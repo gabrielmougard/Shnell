@@ -6,7 +6,7 @@
 #include <string.h>
 #include <signal.h>
 
-#include "States.h"
+#include "LinkedList.h"
 
 #define VERSION "0.1"
 #define BADKEY -1
@@ -60,12 +60,12 @@ int keyFromString(t_symstruct **table,char *key) {
 /*
   builtin shell commands:
  */
-int shnell_cd(char **args);
-int shnell_help(char **args);
-int shnell_exit(char **args);
-int shnell_version(char **args);
-int shnell_pwd(char **args);
-int shnell_led(char **args);
+int shnell_cd(char **args, struct Node* head);
+int shnell_help(char **args, struct Node* head);
+int shnell_exit(char **args, struct Node* head);
+int shnell_version(char **args, struct Node* head);
+int shnell_pwd(char **args, struct Node* head);
+int shnell_led(char **args, struct Node* head);
 
 /*
   List of builtin commands, followed by their corresponding functions.
@@ -79,7 +79,7 @@ char *builtin_str[] = {
   "led"
 };
 
-int (*builtin_func[]) (char **) = {
+int (*builtin_func[]) (char **,struct Node* head) = {
   &shnell_cd,
   &shnell_help,
   &shnell_exit,
@@ -98,7 +98,7 @@ int shnell_num_builtins() {
    @param args List of args.  args[0] is "cd".  args[1] is the directory.
    @return Always returns 1, to continue executing.
  */
-int shnell_cd(char **args)
+int shnell_cd(char **args,struct Node* head)
 {
   if (args[1] == NULL) {
     fprintf(stderr, "shnell: expected argument to \"cd\"\n");
@@ -110,7 +110,7 @@ int shnell_cd(char **args)
   return 1;
 }
 
-int shnell_version(char **args) {
+int shnell_version(char **args, struct Node* head) {
 
   if (args[1] != NULL) {
     //error : there's something after the 'version' command
@@ -132,7 +132,7 @@ int shnell_version(char **args) {
    @param args List of args.  Not examined.
    @return Always returns 1, to continue executing.
  */
-int shnell_help(char **args)
+int shnell_help(char **args, struct Node* head)
 {
   int i;
   printf("\033[1;33m"); //yellow color
@@ -149,7 +149,7 @@ int shnell_help(char **args)
   return 1;
 }
 
-int shnell_pwd(char **args) {
+int shnell_pwd(char **args, struct Node* head) {
 
   if (args[1] != NULL) {
     //error : there's something after the 'pwd' command
@@ -170,7 +170,7 @@ int shnell_pwd(char **args) {
    @param args List of args.  Not examined.
    @return Always returns 0, to terminate execution.
  */
-int shnell_exit(char **args)
+int shnell_exit(char **args,struct Node* head)
 {
   return 0;
 }
@@ -205,7 +205,7 @@ int shnell_launch(char **args)
   return 1;
 }
 
-int shnell_led(char **args) {
+int shnell_led(char **args, struct Node* head) {
   
   char* arg1 = args[1];
   char* arg2 = args[2];
@@ -223,11 +223,12 @@ int shnell_led(char **args) {
   int s = 0;
   if (arg2 != NULL && atoi(arg2) != 0) {
 
-    s = lookup(atoi(arg2));
+    //s = lookup(atoi(arg2));
+    s = getState(head,atoi(arg2));
     
   } else {
     if (strcmp(arg1,"status") == 0) {
-      sumUp();
+      sumUp(head);
       return 1;
     }
     else {
@@ -254,7 +255,8 @@ int shnell_led(char **args) {
 
       if ( s == -1) { // <led_id> do not exists
 
-        insert(atoi(arg2),-1,1);
+        //insert(atoi(arg2),-1,1);
+        append(&head,atoi(arg2),-1,1);
         printf("\033[1;33m"); //yellow color
         printf("The LED #%s has been created and is on\n",arg2);
         printf("\033[0m");
@@ -262,7 +264,7 @@ int shnell_led(char **args) {
       }
       else {
         //it exists, then check the state and if it's off, put it on. If it's already on, trigger the user and keep the same state
-        if (lookup(atoi(arg2)) == 1) { //it was on
+        if (getState(head,atoi(arg2)) == 1) { //it was on
           printf("\033[1;33m"); //yellow color
           printf("The LED #%s was already on\n",arg2);
           printf("\033[0m");
@@ -270,7 +272,7 @@ int shnell_led(char **args) {
           return 1;
         }
         else { //it was off
-          insert(atoi(arg2),-1,1);
+          append(&head,atoi(arg2),-1,1);
           printf("\033[1;33m"); //yellow color
           printf("The LED #%s has been switched on\n",arg2);
           printf("\033[0m");
@@ -301,7 +303,7 @@ int shnell_led(char **args) {
     //check if it already exists. If not, create it.
     if ( s == -1) { // <led_id> do not exists
 
-      insert(atoi(arg2),-1,0);
+      append(&head,atoi(arg2),-1,0);
       printf("\033[1;33m"); //yellow color
       printf("The LED #%s has been created and is off\n",arg2);
       printf("\033[0m");
@@ -310,8 +312,8 @@ int shnell_led(char **args) {
     }
     else {
       //it exists, then check the state and if it's off, put it on. If it's already on, trigger the user and keep the same state
-      if(lookup(atoi(arg2)) == 1) { //it was on
-        insert(atoi(arg2),-1,0);
+      if(getState(head,atoi(arg2)) == 1) { //it was on
+        append(&head,atoi(arg2),-1,0);
         printf("\033[1;33m"); //yellow color
         printf("The LED #%s has been switched off\n",arg2);
         printf("\033[0m");
@@ -354,7 +356,7 @@ int shnell_led(char **args) {
     }
 
     //check before if the led was created before starting forking process in xterm
-    if(lookup(atoi(arg2)) == -1) {
+    if(getState(head,atoi(arg2)) == -1) {
       //error : LED not created
       printf("\033[1;31m");
       printf("Error : This led hasn't been created yet. Use 'led on <led_id>' to create one.\n");
@@ -363,7 +365,7 @@ int shnell_led(char **args) {
     }
     else {
       //check the state. If the state is on, do the blinking. Else, print error.
-      if(lookup(atoi(arg2)) == 0) { //led is off
+      if(getState(head,atoi(arg2)) == 0) { //led is off
         //error : LED not created
         printf("\033[1;31m");
         printf("Error : This led is off. Use 'led on <led_id>' to switch it on.\n");
@@ -383,7 +385,7 @@ int shnell_led(char **args) {
           execl("/usr/bin/xterm","xterm","blink",pid,arg2,arg3,NULL); //blink is the name of the command since it will be pasted in /usr/local/bin
 
           //save pid to STATES
-          insert(atoi(arg2),pid,1);
+          append(&head,atoi(arg2),pid,1);
         }
         else {
           //error : fork not successful
@@ -405,7 +407,7 @@ int shnell_led(char **args) {
       return 1;
     }
 
-    if (lookup(atoi(arg2)) == -1) {
+    if (getState(head,atoi(arg2)) == -1) {
       //error : the <led_id> doesn't exists
       printf("\033[1;31m");
       printf("Error : The <led_id> doesn't exists.\n");
@@ -413,7 +415,7 @@ int shnell_led(char **args) {
       return 1;
     }
 
-    pid_t pidKey = getPid(atoi(arg2));
+    pid_t pidKey = getPid(head,atoi(arg2));
     printf("\033[1;33m"); //yellow color
     printf("The LED %s has been stopped\n",arg2);
     printf("\033[0m");
@@ -439,7 +441,7 @@ int shnell_led(char **args) {
    @param args Null terminated list of arguments.
    @return 1 if the shell should continue running, 0 if it should terminate
  */
-int shnell_execute(char **args)
+int shnell_execute(char **args, struct Node* head)
 {
   int i;
 
@@ -450,7 +452,7 @@ int shnell_execute(char **args)
 
   for (i = 0; i < shnell_num_builtins(); i++) {
     if (strcmp(args[0], builtin_str[i]) == 0) {
-      return (*builtin_func[i])(args);
+      return (*builtin_func[i])(args,head);
     }
   }
 
@@ -543,7 +545,7 @@ char **shnell_split_line(char *line)
 /**
    @brief Loop getting input and executing it.
  */
-void shnell_loop(void)
+void shnell_loop(struct Node* head)
 {
   char *line;
   char **args;
@@ -555,7 +557,7 @@ void shnell_loop(void)
     printf("\033[0m");
     line = shnell_read_line();
     args = shnell_split_line(line);
-    status = shnell_execute(args);
+    status = shnell_execute(args,head);
 
     free(line);
     free(args);
@@ -597,11 +599,14 @@ void printBanner(void) {
  */
 int main(int argc, char **argv)
 {
+  //create the ADT which will contains the ledId,pid,state of the LEDs
+  struct Node head;
+
   //print banner
   printBanner();
 
   // Run command loop.
-  shnell_loop();
+  shnell_loop(&head);
 
   // Perform any shutdown/cleanup.
 
