@@ -24,9 +24,8 @@ Currently, the program is only compatible with Linux systems. (tested on Ubuntu 
 * __help__ : display all commands available for this shell.
 * __led on__ `<led_id>` : activate the led with the specified ID.
 * __led off__ `<led_id>` : desactivate the led with the specified ID.
-* __led off__ `<led_id>` : desactivate the led with the specified ID.
-* __led start-blink__ `<led_id>` `<delay>` :  Blink led `<led_id>` with a `<delay>` in ms between on and off, while keeping the shell working.
-* __led stop-blink__ `<led_id>` :  Stop the blinking led `<led_id>`.
+* __led start-blink__ `<led_id>` `<delay>` :  Blink led `<led_id>` with a `<delay>` in ms between on and off, while keeping the shell working. (__not working yet__)
+* __led stop-blink__ `<led_id>` :  Stop the blinking led `<led_id>`. (__not working yet__)
 * __led status__ :  Show the current state of each led.
 
 *(N.B : we emulate the led state change by writting a message to stdout or stderr)*
