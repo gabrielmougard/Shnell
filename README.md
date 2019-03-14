@@ -66,7 +66,7 @@ To have a glimpse of the child process, you can go in `blinkingProc/bin` and typ
 Thursday the 14th of March 2019 : Finally ! I get rid of the problem ! Instead of using a file storage system for the structure (ledId,PID,state), I decided to implement an internal storage using Node in a LinkedList. However, when I type `led status`, the two first lines are very strange but when adding leds with `led on <LED_ID>` or `led off <LED_ID>` , it works. Now I have to get rid of small bugs and I will be good to go.
 
 Thursday the 14th of March 2019 : I don't understand why the blinking child process is not starting when calling `led start-blink <LED_ID> <DELAY>` (DELAY in ms).
-The list of errors can be found [here](man7.org/linux/man-pages/man2/fork2.html). Of course, if `led start-blink` is unsuccessful, it is the same for `led stop-blink`.
+The list of errors can be found [here](https://linux.die.net/man/2/fork). Of course, if `led start-blink` is unsuccessful, it is the same for `led stop-blink`.
 
 However, all the other features are working (even the bonus ones)
 
